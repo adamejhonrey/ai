@@ -1,0 +1,16 @@
+const express = require('express');
+const app = express();
+
+// Handle POST requests to /api/bot
+app.post('/api/bot', (req, res) => {
+  // Get the message from the request body
+  const message = req.body.message;
+  // Send a response to the client
+  res.json({
+    text: `You sent the message: "${message}"`
+  });
+});
+
+app.listen(3000, () => {
+  console.log('Server listening on port 3000');
+});
