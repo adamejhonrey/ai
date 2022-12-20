@@ -1,67 +1,106 @@
-<style>
-  /* Style the main container element */
-  .container {
-    width: 80%;
-    margin: auto; /* This will center the container horizontally */
-    text-align: center; /* This will center the contents of the container vertically */
-  }
-  /* Style the body element */
-  body {
-    background-color: lightblue;
-  }
-
-  /* Style the h1 element */
-  h1 {
-    color: white;
-    text-shadow: 2px 2px 4px #000000;
-  }
-
-  /* Style the form elements */
-  form {
-    background-color: white;
-    border: 1px solid black;
-    border-radius: 5px;
-    box-shadow: 2px 2px 4px #000000;
-  }
-
-  /* Style the input and button elements */
-  input, button {
-    padding: 5px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-
-  /* Style the submit button */
-  button[type="submit"] {
-    background-color: lightgreen;
-    cursor: pointer;
-  }
-</style>
-<div class="container">
-  <!-- Your content goes here -->
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <title>Chatbot</title>
+  <style>
+    /* Style the main container element */
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 80%;
+      margin: auto; /* This will center the container horizontally */
+      text-align: center; /* This will center the contents of the container vertically */
+      background-color: #F8F8F8;
+      border-radius: 10px;
+    }
+    /* Style the body element */
+    body {
+      background-color: #F8F8F8;
+      font-family: sans-serif;
+    }
+
+    /* Style the header element */
+    header {
+      background-color: #0080FF;
+      color: white;
+      padding: 20px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+
+    /* Style the h1 element */
+    h1 {
+      margin: 0;
+      font-size: 2em;
+    }
+
+    /* Style the form elements */
+    form {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 10px;
+      background-color: white;
+      border: 1px solid #CCCCCC;
+      border-radius: 5px;
+      box-shadow: 2px 2px 4px #000000;
+    }
+
+    /* Style the input and button elements */
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+    }
+    input {
+      flex: 1;
+      border: none;
+      border-radius: 5px 0 0 5px;
+      background-color: #F8F8F8;
+    }
+    button {
+      border: none;
+      border-radius: 0 5px 5px 0;
+      background-color: #0080FF;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* Style the chatbot response element */
+    #chatbot-response {
+      width: 100%;
+      height: 400px;
+      overflow: auto;
+      background-color: white;
+      border: 1px solid #CCCCCC;
+      border-radius: 0 0 5px 5px;
+      box-shadow: 2px 2px 4px #000000;
+    }
+  </style>
 </head>
 <body>
-  <h1>Chatbot</h1>
-  <form id="chatbot-form">
-    <label for="user-input">Enter your message:</label><br>
-    <input type="text" id="user-input" name="user-input"><br>
-    <button type="submit" id="submit-button">Send</button>
-  </form> 
-  <div id="chatbot-response"></div>
+  <div class="container">
+    <!-- Your content goes here -->
+    <header>
+      <h1>Chatbot</h1>
+    </header>
+    <form id="chatbot-form">
+      <input type="text" id="user-input" name="user-input">
+      <button type="submit" id="submit-button">Send</button>
+    </form> 
+    <div id="chatbot-response"></div>
+  </div>
   <script>
-    const chatbotForm = document.getElementById('chatbot-form');
-    const chatbotResponse = document.getElementById('chatbot-response');
-    chatbotForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const userInput = event.target.elements['user-input'].value;
-      chatbotResponse.innerHTML = `You said: "${userInput}"`;
-    });
-  </script>
-</body>
-</html>
-</div>
+  const chatbotForm = document.getElementById('chatbot-form');
+  const chatbotResponse = document.getElementById('chatbot-response');
+  chatbotForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const userInput = event.target.elements['user-input'].value;
+    chatbotResponse.innerHTML += `
+      <div>
+        <p><strong>You said:</strong> "${userInput}"</p>
+      </div>
+    `;
+  });
+</script>
