@@ -92,15 +92,77 @@
     <div id="chatbot-response"></div>
   </div>
   <script>
+  // Function to retrieve the messages from local storage
+  function getMessages() {
+    // Check if the messages are stored in local storage
+    if (localStorage.getItem('messages')) {
+      // If they are, retrieve them and return them as an array
+      return JSON.parse(localStorage.getItem('messages'));
+    } else {
+      // If they are not, return an empty array
+      return [];
+    }
+  }
+
+  // Function to save the messages to local storage
+  function saveMessages(messages) {
+    // Save the messages to local storage as a string
+    localStorage.setItem('messages', JSON.stringify(messages));
+  }
+
+  // Function to display the messages in the chatbot response element
+  function displayMessages(messages) {
+    // Clear the chatbot response element
+    chatbotResponse.innerHTML = '';
+
+    // Loop through the messages and display them
+    messages.forEach((message) => {
+      chatbotResponse.innerHTML += `
+        <div>
+          <p><strong>${message.sender}:</strong> "${message.text}"</p>
+        </div>
+      `;
+    });
+  }
+
   const chatbotForm = document.getElementById('chatbot-form');
   const chatbotResponse = document.getElementById('chatbot-response');
+
+  // Retrieve the messages from local storage
+  let messages = getMessages();
+
+  // Display the messages in the chatbot response element
+  displayMessages(messages);
+
   chatbotForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const userInput = event.target.elements['user-input'].value;
-    chatbotResponse.innerHTML += `
-      <div>
-        <p><strong>You said:</strong> "${userInput}"</p>
-      </div>
-    `;
+
+    // Add the message to the messages array
+    messages.push({
+      sender: 'You',
+      text: userInput
+    });
+
+    // Save the messages to local storage
+    saveMessages(messages);
+
+    // Display the messages in the chatbot response element
+    displayMessages(messages);
   });
+    // Get asnwers from Google
+    async function getSearchResults(query) {
+  // Make a request to the Google Search API
+  const response = await fetch(`https://google.com/search?q=${query}`);
+  // Parse the response as JSON
+  const data = await response.json();
+  // Return the search results
+  return data.searchResults;
+}
+
+const query = 'chatbot';
+getSearchResults(query).then((results) => {
+  console.log(results);
+});
 </script>
+
