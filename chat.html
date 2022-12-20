@@ -94,19 +94,31 @@
   </body>
 </html>
 <script>
-  // Function to retrieve the messages from a database
-  function retrieveMessages() {
-    // Connect to the database and retrieve the messages
+  // Function to retrieve the messages from a JSON file on the server
+  function getMessages() {
+    // Make a request to retrieve the JSON file from the server
+    fetch('/chathis.json')
+      .then(response => response.json())
+      .then(data => {
+        // Return the messages from the JSON file
+        return data.messages;
+      })
+      .catch(error => {
+        // If there is an error, return an empty array
+        return [];
+      });
   }
 
-  // Function to save the messages to a database
+  // Function to save the messages to a JSON file on the server
   function saveMessages(messages) {
-    // Connect to the database and save the messages
-  }
-
-  // Function to delete a specific message or chat
-  function deleteMessage(messageId) {
-    // Connect to the database and delete the message with the specified ID
+    // Make a request to save the messages to the JSON file on the server
+    fetch('/save', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ messages: messages })
+    });
   }
 
   // Function to display the messages in the chatbot response element
@@ -115,58 +127,81 @@
     chatbotResponse.innerHTML = '';
 
     // Loop through the messages and display them
-    messages.forEach(function(message) {
-      // Create a new element to display the message
-      let messageEl = document.createElement('p');
-      messageEl.textContent = message.text;
-
-      // Append the message element to the chatbot response element
-      chatbotResponse.appendChild(messageEl);
+    messages.forEach((message) => {
+      chatbotResponse.innerHTML += `
+        <div>
+          <p><strong>${message.sender}:</strong> "${message.text}"</p>
+        </div>
+      `;
     });
   }
 
-  // Function to send a message to the chatbot
-  function sendMessage(message) {
-    // Save the message to the database
-    saveMessage({
-      sender: 'user',
-      text: message
-    });
-
-    // Use gathered info from Google and Yahoo to generate a response
-    let response = generateResponse(message);
-
-    // Save the response to the database
-    saveMessage({
-      sender: 'chatbot',
-      text: response
-    });
-
-    // Retrieve and display the updated messages from the database
-    displayMessages(retrieveMessages());
+  // Function to get search results from a search engine
+  async function getSearchResults(query) {
+    // Make a request to the search engine API
+    const response = await fetch(`https://google.com/search?q=${query}`);
+    // Parse the response as JSON
+    const data = await response.json();
+    // Return the search results
+    return data.searchResults;
   }
 
-  // Get the chatbot form element
-  let chatbotForm = document.querySelector('#chatbot-form');
+  // Function to improve the AI bot's abilities and features
+  function improveAI() {
+    // Make a request to the AI improvement API
+    fetch('/improve')
+      .then(response => response.json())
+      .then(data => {
+        // Update the AI bot with the improved abilities and features
+        updateAI(data.improvedAI);
+      })
+      .catch(error => {
+        // If there is an error, log it to the console
+        console.error(error);
+      });
+  }
 
-  // Add an event listener to the form to handle form submissions
-  chatbotForm.addEventListener('submit', function(event) {
-    // Prevent the form from reloading the page
+  const chatbotForm = document.getElementById('chatbot-form');
+  const chatbotResponse = document.getElementById('chatbot-response');
+
+  // Retrieve the messages from the JSON file on the server
+  let messages = getMessages();
+
+  // Display the messages in the chatbot response element
+  displayMessages(messages);
+
+  chatbotForm.addEventListener('submit', (event) => {
     event.preventDefault();
+    const userInput = event.target.elements['user-input'].value;
 
-    // Get the user input element
-    let userInput = document.querySelector('#user-input');
-
-    // Get the user's message
-    let message = userInput.value;
-
-    // Send the message to the chatbot
-    sendMessage(message);
-
-    // Clear the user input element
-    userInput.value = '';
+    // Check if the user's message is a search query
+    if (userInput.startsWith('/search')) {
+      // Extract the search query from the message
+      const query = userInput.substring(8);
+      // Get the search results from the search engine
+      getSearchResults(query).then((results) => {
+        // Add the search results to the messages array
+        messages.push({
+          sender: 'Chatbot',
+          text: results
+        });
+        // Save the messages to the JSON file on the server
+        saveMessages(messages);
+        // Display the messages in the chatbot response element
+        displayMessages(messages);
+      });
+    } else {
+      // Add the message to the messages array
+      messages.push({
+        sender: 'You',
+        text: userInput
+      });
+      // Save the messages to the JSON file on the server
+      saveMessages(messages);
+      // Display the messages in the chatbot response element
+      displayMessages(messages);
+      // Improve the AI bot's abilities and features
+      improveAI();
+    }
   });
-
-  // Retrieve and display the initial messages from the database
-  displayMessages(retrieveMessages());
 </script>
