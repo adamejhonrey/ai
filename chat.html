@@ -125,6 +125,16 @@
     });
   }
 
+  // Function to get search results from a search engine
+  async function getSearchResults(query) {
+    // Make a request to the search engine API
+    const response = await fetch(`https://google.com/search?q=${query}`);
+    // Parse the response as JSON
+    const data = await response.json();
+    // Return the search results
+    return data.searchResults;
+  }
+
   const chatbotForm = document.getElementById('chatbot-form');
   const chatbotResponse = document.getElementById('chatbot-response');
 
@@ -138,31 +148,31 @@
     event.preventDefault();
     const userInput = event.target.elements['user-input'].value;
 
-    // Add the message to the messages array
-    messages.push({
-      sender: 'You',
-      text: userInput
-    });
+    // Check if the user's message is a search query
+    if (userInput.startsWith('/search')) {
+      // Extract the search query from the message
+      const query = userInput.substring(8);
+      // Get the search results from the search engine
+      getSearchResults(query).then((results) => {
+        // Add the search results to the messages array
+        messages.push({
+          sender: 'Chatbot',
+          text: results
+        });
+        // Save the messages to local storage
+        saveMessages(messages);
+        // Display the messages in the chatbot response element
+        displayMessages(messages);
+      });
+    } else {
+      // Add the message to the messages array
+      messages.push({
+        sender: 'You',
+        text: userInput
+      });
+      // Save the messages to local storage
+saveMessages(messages);
 
-    // Save the messages to local storage
-    saveMessages(messages);
-
-    // Display the messages in the chatbot response element
-    displayMessages(messages);
-  });
-    // Get asnwers from Google
-    async function getSearchResults(query) {
-  // Make a request to the Google Search API
-  const response = await fetch(`https://google.com/search?q=${query}`);
-  // Parse the response as JSON
-  const data = await response.json();
-  // Return the search results
-  return data.searchResults;
-}
-
-const query = 'chatbot';
-getSearchResults(query).then((results) => {
-  console.log(results);
-});
-</script>
-
+// Display the messages in the chatbot response element
+displayMessages(messages);
+  </script>
