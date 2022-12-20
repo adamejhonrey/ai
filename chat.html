@@ -1,38 +1,67 @@
-<!-- Message template container -->
-<div id="message-template">
-  <!-- Message input form -->
-  <form id="message-form">
-    <input type="text" id="message-input" placeholder="Ask a question or enter a message...">
-    <button type="submit" id="send-button">Send</button>
-  </form>
-  <!-- Message history -->
-  <div id="message-history">
-    <!-- Template for a single message -->
-    <div class="message" id="template-message">
-      <div class="message-avatar">
-        <img src="avatar.png" alt="Avatar">
-      </div>
-      <div class="message-text">
-        <p class="message-sender"></p>
-        <p class="message-content"></p>
-      </div>
-    </div>
-    <!-- Template for a loading indicator -->
-    <div class="message loading" id="template-loading">
-      <div class="message-avatar">
-        <img src="avatar.png" alt="Avatar">
-      </div>
-      <div class="message-text">
-        <p class="message-sender">Bot</p>
-        <div class="loading-indicator">
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<style>
+  /* Style the main container element */
+  .container {
+    width: 80%;
+    margin: auto; /* This will center the container horizontally */
+    text-align: center; /* This will center the contents of the container vertically */
+  }
+  /* Style the body element */
+  body {
+    background-color: lightblue;
+  }
 
-<!-- Include the app.js file -->
-<script src="/main.js"></script>
+  /* Style the h1 element */
+  h1 {
+    color: white;
+    text-shadow: 2px 2px 4px #000000;
+  }
+
+  /* Style the form elements */
+  form {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    box-shadow: 2px 2px 4px #000000;
+  }
+
+  /* Style the input and button elements */
+  input, button {
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  /* Style the submit button */
+  button[type="submit"] {
+    background-color: lightgreen;
+    cursor: pointer;
+  }
+</style>
+<div class="container">
+  <!-- Your content goes here -->
+  <!DOCTYPE html>
+<html>
+<head>
+  <title>Chatbot</title>
+</head>
+<body>
+  <h1>Chatbot</h1>
+  <form id="chatbot-form">
+    <label for="user-input">Enter your message:</label><br>
+    <input type="text" id="user-input" name="user-input"><br>
+    <button type="submit" id="submit-button">Send</button>
+  </form> 
+  <div id="chatbot-response"></div>
+  <script>
+    const chatbotForm = document.getElementById('chatbot-form');
+    const chatbotResponse = document.getElementById('chatbot-response');
+    chatbotForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const userInput = event.target.elements['user-input'].value;
+      chatbotResponse.innerHTML = `You said: "${userInput}"`;
+    });
+  </script>
+</body>
+</html>
+</div>
